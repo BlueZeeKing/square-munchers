@@ -1,4 +1,4 @@
-use axum::{routing::get, Router};
+use axum::{routing::get, Router, response::Html};
 
 #[tokio::main]
 async fn main() {
@@ -10,6 +10,9 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn root() -> &'static str {
-    "Hello, world!"
+async fn root() -> Html<String> {
+    let html = tokio::fs::read_to_string("public/index.html").await.unwrap();
+    axum::response::Html(html)
 }
+
+
